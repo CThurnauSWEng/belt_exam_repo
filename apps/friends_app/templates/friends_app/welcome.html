@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>User</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'friends_app/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+</head>
+<body>
+    <div>
+        <a href="/user/logout" class="navbar1">Logout</a>
+    </div>
+    <div class="oneperpage">
+        <h3 class="indent_p">Hello, {{ this_user.name }}!</h3></br>
+        <h4>Here is a list of your friends: </h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alias</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for friend in this_users_friends %}
+                    <tr>
+                        <td>{{ friend.receiver.alias }}</td>
+                        <td><a href="/friends/show_friend/{{ friend.receiver.id }}">View Profile</a><a href="/friends/remove_friend/{{ friend.receiver.id }}">Remove as Friend</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </br>
+        <h3>Other users not on your friend's list</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alias</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nfy in nfyet %}
+                    <tr>
+                        <td><a href="/friends/show_friend/{{nfy.id}}">{{ nfy.alias }}</a></td>
+                        <td><form action="/friends/make_friends" method="POST" >
+                                {% csrf_token %} 
+                                <input type="hidden" name="new_friend_id" value="{{ nfy.id }}">
+                                <input type="submit" name="" value="Add as Friend" class="button3">
+                            </form>        
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+   </div>    
+</body>
+</html>
